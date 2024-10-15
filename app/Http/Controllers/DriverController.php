@@ -12,7 +12,17 @@ class DriverController extends Controller
 {
     public function index()
     {
-        return Driver::all();
+        $user = auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $drivers = Driver::all(); // Админ видит всех
+        } elseif ($user->hasRole('manager')) {
+            $drivers = Driver::with('bus')->get(); // Менеджер видит водителей и автобусы
+        } elseif ($user->hasRole('driver')) {
+            $drivers = Driver::where('id', $user->id)->with('bus')->get(); // Водитель видит только себя и автобус
+        }
+
+        return view('drivers.index', compact('drivers'));
     }
 
     public function create()
