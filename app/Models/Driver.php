@@ -9,6 +9,15 @@ class Driver extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'date_of_birth',
+        'image',
+        'salary',
+        'email',
+    ];
+
     protected static function boot()
     {
         parent::boot();
