@@ -2,63 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCarBrandRequest;
+use App\Models\CarBrand;
 use Illuminate\Http\Request;
 
 class CarBrandController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return CarBrand::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('car_brands.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCarBrandRequest $request)
     {
-        //
+        CarBrand::create($request->validated());
+
+        return redirect()->route('car_brands.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(CarBrand $carBrand)
     {
-        //
+        return view('car_brands.edit', compact('carBrand'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(StoreCarBrandRequest $request, CarBrand $carBrand)
     {
-        //
+        $carBrand->update($request->validated());
+
+        return redirect()->route('car_brands.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(CarBrand $carBrand)
     {
-        //
-    }
+        $carBrand->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('car_brands.index');
     }
 }
