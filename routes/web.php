@@ -26,6 +26,10 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::post('/admin/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
 });
 
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    Route::get('/admin/driver-applications', [DriverApplicationController::class, 'index'])->name('admin.driver_applications.index');
+});
+
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::get('become-driver', [DriverApplicationController::class, 'showForm'])->name('become.driver');
