@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,3 +27,5 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin.settings.index');
     Route::post('/admin/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
 });
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
