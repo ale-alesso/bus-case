@@ -2,63 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBusRequest;
+use App\Models\Bus;
+use App\Models\CarBrand;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 
 class BusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Bus::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $brands = CarBrand::all();
+        $drivers = Driver::all();
+        return view('buses.create', compact('brands', 'drivers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreBusRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $validatedData['license_plate'] = strtoupper($validatedData['license_plate']);
+
+        Bus::create($validatedData);
+
+        return redirect()->route('buses.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Bus $bus)
     {
-        //
+        $brands = CarBrand::all();
+        $drivers = Driver::all();
+        return view('buses.edit', compact('bus', 'brands', 'drivers'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(StoreBusRequest$request, Bus $bus)
     {
-        //
+        $validatedData = $request->validated();
+        $validatedData['license_plate'] = strtoupper($validatedData['license_plate']);
+
+        $bus->update($validatedData);
+
+        return redirect()->route('buses.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Bus $bus)
     {
-        //
-    }
+        $bus->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('buses.index');
     }
 }
