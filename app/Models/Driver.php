@@ -6,5 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Driver extends Model
 {
-    //
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($driver) {
+            $driver->buses()->update(['driver_id' => null]);
+
+            dispatch(new \App\Jobs\SendGoodbyeEmailJob($driver))->delay(now()->addMinutes(5));
+        });
+    }
+
+    public function buses()
+    {
+        return $this->hasMany(Bus::class);
+    }
 }
