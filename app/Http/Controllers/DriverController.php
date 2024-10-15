@@ -2,63 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
+use App\Http\Requests\StoreDriverRequest;
 use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(StoreDriverRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $validatedData['first_name'] = strtolower($validatedData['first_name']);
+        $validatedData['last_name'] = strtolower($validatedData['last_name']);
+
+        Driver::create($validatedData);
+
+        return redirect()->route('drivers.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(StoreDriverRequest $request, Driver $driver)
     {
-        //
-    }
+        $validatedData = $request->validated();
+        $validatedData['first_name'] = strtolower($validatedData['first_name']);
+        $validatedData['last_name'] = strtolower($validatedData['last_name']);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $driver->update($validatedData);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('drivers.index');
     }
 }
