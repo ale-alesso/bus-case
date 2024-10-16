@@ -14,11 +14,7 @@ class DriverApplicationController extends Controller
 
     public function submitForm(Request $request)
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'birthdate' => 'required|date|before:65 years ago', // Валидация возраста
-        ]);
+        $validatedData = $request->validated();
 
         $application = DriverApplication::create($validatedData);
 
